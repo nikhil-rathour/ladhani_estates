@@ -22,7 +22,6 @@ export default function Header() {
           <Link to="/" className={`hover:text-emerald-500 transition-colors ${scrolled ? 'text-slate-700' : 'text-white'}`}>Home</Link>
           <Link to="/rent" className={`hover:text-emerald-500 transition-colors ${scrolled ? 'text-slate-700' : 'text-white'}`}>Rent</Link>
           <Link to="/buy" className={`hover:text-emerald-500 transition-colors ${scrolled ? 'text-slate-700' : 'text-white'}`}>Buy</Link>
-          <Link to="/locations" className={`hover:text-emerald-500 transition-colors ${scrolled ? 'text-slate-700' : 'text-white'}`}>Locations</Link>
           <Link to="/about" className={`hover:text-emerald-500 transition-colors ${scrolled ? 'text-slate-700' : 'text-white'}`}>About Us</Link>
           <Link to="/contact" className={`hover:text-emerald-500 transition-colors ${scrolled ? 'text-slate-700' : 'text-white'}`}>Contact</Link>
           <button className="bg-emerald-600 text-white px-6 py-2 rounded-full hover:bg-emerald-700 transition-all">List Your Property</button>
@@ -41,7 +40,6 @@ export default function Header() {
             <Link to="/" className="text-slate-700 hover:text-emerald-500">Home</Link>
             <Link to="/rent" className="text-slate-700 hover:text-emerald-500">Rent</Link>
             <Link to="/buy" className="text-slate-700 hover:text-emerald-500">Buy</Link>
-            <Link to="/locations" className="text-slate-700 hover:text-emerald-500">Locations</Link>
             <Link to="/about" className="text-slate-700 hover:text-emerald-500">About Us</Link>
             <Link to="/contact" className="text-slate-700 hover:text-emerald-500">Contact</Link>
             <button className="bg-emerald-600 text-white px-6 py-2 rounded-full hover:bg-emerald-700 transition-all">List Your Property</button>
