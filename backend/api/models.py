@@ -1,3 +1,22 @@
 from django.db import models
 
-# Create your models here.
+class User(models.Model):
+    ROLE_CHOICES = [
+        ('buyer', 'Buyer'),
+        ('seller', 'Seller'),
+        ('agent', 'Agent'),
+    ]
+    
+    firebase_uid = models.CharField(max_length=255, unique=True)
+    email = models.EmailField(unique=True)
+    name = models.CharField(max_length=255)
+    phone = models.CharField(max_length=20)
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.email
+
+    class Meta:
+        db_table = 'users'

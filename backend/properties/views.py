@@ -1,7 +1,9 @@
 from rest_framework import viewsets, filters
+from rest_framework.permissions import AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Amenity, Property
 from .serializers import AmenitySerializer, PropertySerializer
+from api.authentication import FirebaseAuthentication
 
 
 class AmenityViewSet(viewsets.ModelViewSet):
@@ -20,6 +22,11 @@ class PropertyViewSet(viewsets.ModelViewSet):
     search_fields = ['title', 'city', 'area']
     ordering_fields = ['price', 'created_at']
     ordering = ['-created_at']
+    permission_classes = [AllowAny]
+    authentication_classes = []
 
-    def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user)
+    def retrieve(self, request, *args, **kwargs):
+        # Apply authentication only for retrieve action
+        self.authentication_classes = [FirebaseAuthentication]
+        self.permission_classes = []
+        return super().retrieve(request, *args, **kwargs)

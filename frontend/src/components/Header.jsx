@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { firebaseUser, backendUser, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -24,7 +26,22 @@ export default function Header() {
           <Link to="/buy" className={`hover:text-emerald-500 transition-colors ${scrolled ? 'text-slate-700' : 'text-white'}`}>Buy</Link>
           <Link to="/about" className={`hover:text-emerald-500 transition-colors ${scrolled ? 'text-slate-700' : 'text-white'}`}>About Us</Link>
           <Link to="/contact" className={`hover:text-emerald-500 transition-colors ${scrolled ? 'text-slate-700' : 'text-white'}`}>Contact</Link>
-          <button className="bg-emerald-600 text-white px-6 py-2 rounded-full hover:bg-emerald-700 transition-all">List Your Property</button>
+          
+          {firebaseUser ? (
+            <div className="flex items-center gap-4">
+              <span className={`${scrolled ? 'text-slate-700' : 'text-white'}`}>
+                {backendUser?.name || firebaseUser.email}
+              </span>
+              <button 
+                onClick={logout}
+                className="bg-red-600 text-white px-6 py-2 rounded-full hover:bg-red-700 transition-all"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <button className="bg-emerald-600 text-white px-6 py-2 rounded-full hover:bg-emerald-700 transition-all">List Your Property</button>
+          )}
         </div>
 
         <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className={`md:hidden ${scrolled ? 'text-slate-900' : 'text-white'}`}>

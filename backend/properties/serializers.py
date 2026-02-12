@@ -30,7 +30,7 @@ class PropertySerializer(serializers.ModelSerializer):
             'id', 'title', 'slug', 'description', 'property_type', 'listing_type',
             'price', 'city', 'area', 'address', 'bedrooms', 'bathrooms',
             'built_up_area', 'image1', 'image2', 'image3', 'image4', 'image5',
-            'amenities', 'amenity_ids', 'is_featured', 'is_active', 'created_at', 'created_by'
+            'amenities', 'amenity_ids', 'is_featured', 'is_active', 'created_at'
         ]
         read_only_fields = ['slug', 'created_at']
 

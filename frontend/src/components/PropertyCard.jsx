@@ -1,8 +1,14 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import AuthModal from './AuthModal';
+import ProfileCompletionModal from './ProfileCompletionModal';
 
 const PropertyCard = memo(({ property }) => {
   const navigate = useNavigate();
+  const { firebaseUser, profileCompleted } = useAuth();
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
   const { id, title, price, city, area, bedrooms, bathrooms, built_up_area, image1, property_type, listing_type } = property;
   
   const imageUrl = image1 || 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800';
@@ -65,11 +71,32 @@ const PropertyCard = memo(({ property }) => {
         </div>
         
         <button 
-          onClick={() => navigate(`/property/${id}`)}
+          onClick={() => {
+            if (!firebaseUser) {
+              setShowAuthModal(true);
+              return;
+            }
+            if (!profileCompleted) {
+              setShowProfileModal(true);
+              return;
+            }
+            navigate(`/property/${id}`);
+          }}
           className="w-full bg-slate-900 text-white py-3 rounded-lg hover:bg-emerald-600 transition-all duration-300 font-semibold"
         >
           View Details
         </button>
+        
+        <AuthModal 
+          isOpen={showAuthModal} 
+          onClose={() => setShowAuthModal(false)} 
+        />
+        
+        <ProfileCompletionModal 
+          isOpen={showProfileModal} 
+          onClose={() => setShowProfileModal(false)}
+          onComplete={() => navigate(`/property/${id}`)}
+        />
       </div>
     </div>
   );

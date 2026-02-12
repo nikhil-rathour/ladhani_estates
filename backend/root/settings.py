@@ -162,6 +162,9 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'api.authentication.FirebaseAuthentication',
+    ],
 }
 
 # CORS Configuration
@@ -170,3 +173,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
 ]
 CORS_ALLOW_CREDENTIALS = True
+
+# Initialize Firebase
+from root.firebase import initialize_firebase
+initialize_firebase()
