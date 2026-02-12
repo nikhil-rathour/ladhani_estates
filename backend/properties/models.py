@@ -29,6 +29,12 @@ class Property(models.Model):
         ('Rent', 'Rent'),
     ]
 
+    STATUS_CHOICES = [
+        ('Available', 'Available'),
+        ('Sold', 'Sold'),
+        ('Rented', 'Rented'),
+    ]
+
     # Basic Info
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True, blank=True)
@@ -60,8 +66,10 @@ class Property(models.Model):
     amenities = models.ManyToManyField(Amenity, blank=True, related_name='properties')
 
     # Status
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Available')
     is_featured = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    is_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     # Relationship
