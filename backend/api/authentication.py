@@ -1,30 +1,44 @@
-from rest_framework import authentication, exceptions
 from firebase_admin import auth
+from rest_framework import authentication, exceptions
+
+from root.firebase import initialize_firebase
+
 from .models import User
 
+
 class FirebaseAuthentication(authentication.BaseAuthentication):
+    keyword = "Bearer"
+
     def authenticate(self, request):
-        auth_header = request.META.get('HTTP_AUTHORIZATION')
-        
-        if not auth_header:
+        raw_header = authentication.get_authorization_header(request).decode("utf-8")
+        if not raw_header:
             return None
-        
+
+        header_parts = raw_header.split()
+        if len(header_parts) != 2 or header_parts[0].lower() != self.keyword.lower():
+            raise exceptions.AuthenticationFailed("Invalid authorization header.")
+
+        token = header_parts[1].strip()
+        if not token:
+            raise exceptions.AuthenticationFailed("Missing authentication token.")
+
         try:
-            token = auth_header.split(' ')[1]
+            initialize_firebase()
             decoded_token = auth.verify_id_token(token)
-            firebase_uid = decoded_token['uid']
-            
-            try:
-                user = User.objects.get(firebase_uid=firebase_uid)
-                return (user, None)
-            except User.DoesNotExist:
-                raise exceptions.AuthenticationFailed('User not found')
-                
-        except IndexError:
-            raise exceptions.AuthenticationFailed('Invalid token format')
-        except auth.InvalidIdTokenError:
-            raise exceptions.AuthenticationFailed('Invalid token')
-        except auth.ExpiredIdTokenError:
-            raise exceptions.AuthenticationFailed('Token expired')
-        except Exception as e:
-            raise exceptions.AuthenticationFailed(str(e))
+            firebase_uid = decoded_token.get("uid")
+            if not firebase_uid:
+                raise exceptions.AuthenticationFailed("Invalid token payload.")
+
+            user = User.objects.filter(firebase_uid=firebase_uid).first()
+            if user is None:
+                raise exceptions.AuthenticationFailed("User not found.")
+
+            return (user, None)
+        except auth.InvalidIdTokenError as exc:
+            raise exceptions.AuthenticationFailed("Invalid token.") from exc
+        except auth.ExpiredIdTokenError as exc:
+            raise exceptions.AuthenticationFailed("Token expired.") from exc
+        except ValueError as exc:
+            raise exceptions.AuthenticationFailed("Firebase credentials are not configured.") from exc
+        except Exception as exc:
+            raise exceptions.AuthenticationFailed("Authentication failed.") from exc

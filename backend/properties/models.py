@@ -18,35 +18,35 @@ class Amenity(models.Model):
 
 class Property(models.Model):
     PROPERTY_TYPE_CHOICES = [
-        ('Apartment', 'Apartment'),
-        ('Villa', 'Villa'),
-        ('Plot', 'Plot'),
-        ('Commercial', 'Commercial'),
+        ("Apartment", "Apartment"),
+        ("Villa", "Villa"),
+        ("Plot", "Plot"),
+        ("Commercial", "Commercial"),
     ]
 
     LISTING_TYPE_CHOICES = [
-        ('Sale', 'Sale'),
-        ('Rent', 'Rent'),
+        ("Sale", "Sale"),
+        ("Rent", "Rent"),
     ]
 
     STATUS_CHOICES = [
-        ('Available', 'Available'),
-        ('Sold', 'Sold'),
-        ('Rented', 'Rented'),
+        ("Available", "Available"),
+        ("Sold", "Sold"),
+        ("Rented", "Rented"),
     ]
 
     # Basic Info
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True, blank=True)
     description = models.TextField()
-    property_type = models.CharField(max_length=20, choices=PROPERTY_TYPE_CHOICES)
+    property_type = models.CharField(max_length=20, choices=PROPERTY_TYPE_CHOICES, db_index=True)
     listing_type = models.CharField(max_length=10, choices=LISTING_TYPE_CHOICES)
 
     # Pricing
-    price = models.DecimalField(max_digits=12, decimal_places=2)
+    price = models.DecimalField(max_digits=12, decimal_places=2, db_index=True)
 
     # Location
-    city = models.CharField(max_length=100)
+    city = models.CharField(max_length=100, db_index=True)
     area = models.CharField(max_length=100)
     address = models.TextField()
 
@@ -66,18 +66,18 @@ class Property(models.Model):
     amenities = models.ManyToManyField(Amenity, blank=True, related_name='properties')
 
     # Status
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Available')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Available")
     is_featured = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_verified = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
     # Relationship
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='properties')
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="properties")
 
     class Meta:
-        verbose_name_plural = 'Properties'
-        ordering = ['-created_at']
+        verbose_name_plural = "Properties"
+        ordering = ["-created_at"]
 
     def __str__(self):
         return self.title
@@ -86,6 +86,4 @@ class Property(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
-
-
 
