@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import Amenity, Property
-import os
 
 
 class AmenitySerializer(serializers.ModelSerializer):
@@ -52,8 +51,7 @@ class PropertySerializer(serializers.ModelSerializer):
     def _get_cloudinary_url(self, image_field):
         if not image_field:
             return None
-        cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME')
-        return f"https://res.cloudinary.com/{cloud_name}/{image_field}"
+        return getattr(image_field, 'url', str(image_field))
 
     def create(self, validated_data):
         amenities = validated_data.pop('amenities', [])
