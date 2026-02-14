@@ -32,14 +32,20 @@ def get_env_list(name, default=None):
 
 DEFAULT_SECRET_KEY = 'django-insecure-dev-only-change-me'
 SECRET_KEY = os.getenv('SECRET_KEY', DEFAULT_SECRET_KEY)
-DEBUG = get_env_bool('DEBUG', True)
+IS_VERCEL = bool(os.getenv('VERCEL'))
+DEBUG = get_env_bool('DEBUG', not IS_VERCEL)
 
 if not DEBUG and SECRET_KEY == DEFAULT_SECRET_KEY:
     raise ImproperlyConfigured('SECRET_KEY must be configured when DEBUG=False.')
 
+default_allowed_hosts = ['localhost', '127.0.0.1', '.vercel.app']
+vercel_url = os.getenv('VERCEL_URL')
+if vercel_url:
+    default_allowed_hosts.append(vercel_url)
+
 ALLOWED_HOSTS = get_env_list(
     'ALLOWED_HOSTS',
-    default=['localhost', '127.0.0.1'] if DEBUG else ['.vercel.app'],
+    default=default_allowed_hosts,
 )
 
 
