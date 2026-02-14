@@ -1,4 +1,11 @@
 export default function Hero() {
+  const handleExploreProperties = () => {
+    const targetSection = document.getElementById('recent-listings');
+    if (targetSection) {
+      targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center">
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920')] bg-cover bg-center"></div>
@@ -12,7 +19,10 @@ export default function Hero() {
           Discover premium properties for rent and sale. Your dream home awaits with our expert guidance and exceptional service.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <button className="bg-emerald-600 text-white px-8 py-4 rounded-full hover:bg-emerald-700 transition-all duration-300 font-semibold">
+          <button
+            onClick={handleExploreProperties}
+            className="bg-emerald-600 text-white px-8 py-4 rounded-full hover:bg-emerald-700 transition-all duration-300 font-semibold"
+          >
             Explore Properties
           </button>
           <button className="border-2 border-white text-white px-8 py-4 rounded-full hover:bg-white hover:text-slate-900 transition-all duration-300 font-semibold">
