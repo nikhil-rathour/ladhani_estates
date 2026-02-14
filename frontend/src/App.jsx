@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
+import WhatsAppButton from './components/WhatsAppButton';
 import Home from './pages/Home';
 import About from './pages/About';
 import PropertyDetail from './pages/PropertyDetail';
@@ -23,9 +24,10 @@ function App() {
           <Route path="/property/:id" element={<PropertyDetail />} />
         </Routes>
       </main>
+      <WhatsAppButton />
       <Footer />
     </BrowserRouter>
   );
 }
 
-export default App
+export default App;

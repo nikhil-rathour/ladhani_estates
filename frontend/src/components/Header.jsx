@@ -58,7 +58,6 @@ export default function Header() {
             <Link to="/rent" className="text-slate-700 hover:text-emerald-500">Rent</Link>
             <Link to="/buy" className="text-slate-700 hover:text-emerald-500">Buy</Link>
             <Link to="/about" className="text-slate-700 hover:text-emerald-500">About Us</Link>
-            <Link to="/contact" className="text-slate-700 hover:text-emerald-500">Contact</Link>
             <button className="bg-emerald-600 text-white px-6 py-2 rounded-full hover:bg-emerald-700 transition-all">List Your Property</button>
           </div>
         </div>
