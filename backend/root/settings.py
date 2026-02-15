@@ -189,11 +189,16 @@ REST_FRAMEWORK = {
 }
 
 
-CORS_ALLOWED_ORIGINS = get_env_list(
-    'CORS_ALLOWED_ORIGINS',
-    default=['http://localhost:3000', 'http://localhost:5173'] if DEBUG else [],
+default_cors_allowed_origins = ['http://localhost:3000', 'http://localhost:5173'] if DEBUG else []
+default_cors_allowed_origin_regexes = [] if DEBUG else [r'^https://.*\.vercel\.app$']
+default_csrf_trusted_origins = [] if DEBUG else ['https://*.vercel.app']
+
+CORS_ALLOWED_ORIGINS = get_env_list('CORS_ALLOWED_ORIGINS', default=default_cors_allowed_origins)
+CORS_ALLOWED_ORIGIN_REGEXES = get_env_list(
+    'CORS_ALLOWED_ORIGIN_REGEXES',
+    default=default_cors_allowed_origin_regexes,
 )
-CSRF_TRUSTED_ORIGINS = get_env_list('CSRF_TRUSTED_ORIGINS', default=[])
+CSRF_TRUSTED_ORIGINS = get_env_list('CSRF_TRUSTED_ORIGINS', default=default_csrf_trusted_origins)
 CORS_ALLOW_CREDENTIALS = get_env_bool('CORS_ALLOW_CREDENTIALS', True)
 
 

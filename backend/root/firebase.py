@@ -6,6 +6,11 @@ import os
 def initialize_firebase():
     if not firebase_admin._apps:
         private_key = os.getenv("FIREBASE_PRIVATE_KEY")
+        if private_key:
+            # Allow keys copied with surrounding quotes from .env files.
+            private_key = private_key.strip().strip('"').strip("'")
+            private_key = private_key.replace('\\n', '\n')
+
         required_values = [
             os.getenv("FIREBASE_TYPE"),
             os.getenv("FIREBASE_PROJECT_ID"),
@@ -27,7 +32,7 @@ def initialize_firebase():
             "type": os.getenv("FIREBASE_TYPE"),
             "project_id": os.getenv("FIREBASE_PROJECT_ID"),
             "private_key_id": os.getenv("FIREBASE_PRIVATE_KEY_ID"),
-            "private_key": private_key.replace('\\n', '\n'),
+            "private_key": private_key,
             "client_email": os.getenv("FIREBASE_CLIENT_EMAIL"),
             "client_id": os.getenv("FIREBASE_CLIENT_ID"),
             "auth_uri": os.getenv("FIREBASE_AUTH_URI"),
