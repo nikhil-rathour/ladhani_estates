@@ -1,15 +1,8 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
 import { auth, googleProvider } from '../firebase';
-import axios from 'axios';
-
-const AuthContext = createContext();
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) throw new Error('useAuth must be used within AuthProvider');
-  return context;
-};
+import api from '../api/client';
+import AuthContext from './auth-context';
 
 export const AuthProvider = ({ children }) => {
   const [firebaseUser, setFirebaseUser] = useState(null);
@@ -24,10 +17,7 @@ export const AuthProvider = ({ children }) => {
       if (user) {
         try {
           const token = await user.getIdToken();
-          const response = await axios.post(
-            `${import.meta.env.VITE_API_BASE_URL}/auth/register-or-login/`,
-            { token }
-          );
+          const response = await api.post('/auth/register-or-login/', { token });
           
           setBackendUser(response.data.user);
           setProfileCompleted(response.data.profileCompleted);
@@ -50,10 +40,7 @@ export const AuthProvider = ({ children }) => {
       const result = await signInWithPopup(auth, googleProvider);
       const token = await result.user.getIdToken();
       
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/auth/register-or-login/`,
-        { token }
-      );
+      const response = await api.post('/auth/register-or-login/', { token });
       
       setBackendUser(response.data.user);
       setProfileCompleted(response.data.profileCompleted);
@@ -68,10 +55,7 @@ export const AuthProvider = ({ children }) => {
   const completeProfile = async (profileData) => {
     try {
       const token = await firebaseUser.getIdToken();
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/auth/register-or-login/`,
-        { token, ...profileData }
-      );
+      const response = await api.post('/auth/register-or-login/', { token, ...profileData });
       
       setBackendUser(response.data.user);
       setProfileCompleted(true);

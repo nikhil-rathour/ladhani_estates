@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 
 const AuthModal = ({ isOpen, onClose }) => {
   const { loginWithGoogle } = useAuth();
@@ -14,7 +14,7 @@ const AuthModal = ({ isOpen, onClose }) => {
     try {
       await loginWithGoogle();
       onClose();
-    } catch (err) {
+    } catch {
       setError('Failed to sign in. Please try again.');
     } finally {
       setLoading(false);
